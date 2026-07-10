@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
+    <title>☕ Café & Aroma - Cardápio Virtual</title>
+    <!-- Fontes e ícones -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,600;14..32,700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <style>
+        /* RESET e ESTILOS GERAIS */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #faf6f0;
+            color: #2d1f14;
+            padding: 20px 16px 80px;
+        }
+
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+        }
+
+        /* CABEÇALHO */
+        .header {
+            text-align: center;
+            padding: 16px 0 24px;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            color: #3b2a1b;
+        }
+
+        .header h1 i {
+            color: #b67b4b;
+            margin-right: 8px;
+        }
+
+        .header p {
+            color: #6b5340;
+            font-size: 15px;
+            margin-top: 4px;
+        }
+
+        .header .badge {
+            display: inline-block;
+            background: #d9c5b0;
+            padding: 4px 16px;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #3b2a1b;
+            margin-top: 10px;
+            letter-spacing: 0.3px;
+        }
+
+        /* BARRA DE PESQUISA */
+        .search-box {
+            background: #fff;
+            border-radius: 60px;
+            padding: 8px 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+            border: 1px solid #ede6dd;
+            margin-bottom: 28px;
+        }
+
+        .search-box i {
+            color: #b67b4b;
+            font-size: 18px;
+        }
+
+        .search-box input {
+            border: none;
+            outline: none;
+            background: transparent;
+            width: 100%;
+            font-size: 15px;
+            padding: 10px 0;
+            font-family: 'Inter', sans-serif;
+            color: #2d1f14;
+        }
+
+        .search-box input::placeholder {
+            color: #b39b89;
+        }
+
+        /* FILTROS (categorias) */
+        .filters {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 28px;
+        }
+
+        .filters button {
+            background: #fff;
+            border: 1px solid #e2d6ca;
+            border-radius: 40px;
+            padding: 8px 18px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #5f4533;
+            cursor: pointer;
+            transition: 0.2s;
+            font-family: 'Inter', sans-serif;
+            flex: 1 0 auto;
+            max-width: fit-content;
+        }
+
+        .filters button.active {
+            background: #3b2a1b;
+            color: #fff;
+            border-color: #3b2a1b;
+        }
+
+        .filters button i {
+            margin-right: 6px;
+        }
+
+        /* LISTA DE ITENS */
+        .menu-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .menu-item {
+            background: #fff;
+            border-radius: 20px;
+            padding: 16px 18px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+            border: 1px solid #ede6dd;
+            transition: 0.2s;
+            animation: fadeUp 0.3s ease;
+        }
+
+        .menu-item.hidden {
+            display: none;
+        }
+
+        @keyframes fadeUp {
+            0% { opacity: 0; transform: translateY(8px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ícone/emoji do item */
+        .item-icon {
+            font-size: 32px;
+            width: 50px;
+            height: 50px;
+            background: #f5efe9;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .item-info {
+            flex: 1;
+        }
+
+        .item-info h3 {
+            font-size: 17px;
+            font-weight: 700;
+            color: #2d1f14;
+        }
+
+        .item-info .desc {
+            font-size: 13px;
+            color: #7a6453;
+            margin-top: 2px;
+            line-height: 1.3;
+        }
+
+        .item-info .tags {
+            display: flex;
+            gap: 6px;
+            margin-top: 5px;
+            flex-wrap: wrap;
+        }
+
+        .item-info .tags span {
+            background: #f0e8e0;
+            font-size: 10px;
+            font-weight: 600;
+            padding: 2px 10px;
+            border-radius: 30px;
+            color: #5f4533;
+            letter-spacing: 0.2px;
+        }
+
+        .item-price {
+            font-weight: 700;
+            font-size: 18px;
+            color: #3b2a1b;
+            white-space: nowrap;
+            margin-left: auto;
+            padding-left: 8px;
+        }
+
+        .item-price small {
+            font-size: 13px;
+            font-weight: 400;
+            color: #8a7563;
+        }
+
+        /* RODAPÉ (whatsapp flutuante) */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #25D366;
+            color: #fff;
+            border: none;
+            border-radius: 60px;
+            padding: 14px 28px;
+            font-size: 16px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 8px 24px rgba(37, 211, 102, 0.35);
+            cursor: pointer;
+            transition: 0.2s;
+            font-family: 'Inter', sans-serif;
+            z-index: 999;
+            border: 1px solid rgba(255,255,255,0.2);
+            max-width: 90%;
+        }
+
+        .whatsapp-float i {
+            font-size: 22px;
+        }
+
+        .whatsapp-float:hover {
+            background: #20b85f;
+            transform: translateX(-50%) scale(1.02);
+        }
+
+        .whatsapp-float:active {
+            transform: translateX(-50%) scale(0.97);
+        }
+
+        /* RESPONSIVO */
+        @media (max-width: 420px) {
+            .header h1 { font-size: 24px; }
+            .item-icon { width: 44px; height: 44px; font-size: 26px; }
+            .item-info h3 { font-size: 15px; }
+            .item-price { font-size: 16px; }
+            .whatsapp-float { padding: 12px 20px; font-size: 14px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- CABEÇALHO -->
+    <div class="header">
+        <h1><i class="fas fa-mug-hot"></i> Café & Aroma</h1>
+        <p>Cardápio digital • Teresina - PI</p>
+        <span class="badge"><i class="fas fa-clock"></i> Aberto • 08h – 22h</span>
+    </div>
+
+    <!-- PESQUISA -->
+    <div class="search-box">
+        <i class="fas fa-search"></i>
+        <input type="text" id="searchInput" placeholder="Buscar no cardápio..." />
+    </div>
+
+    <!-- FILTROS -->
+    <div class="filters" id="filterContainer">
+        <button class="active" data-filter="todos"><i class="fas fa-th-list"></i> Todos</button>
+        <button data-filter="cafes"><i class="fas fa-mug-saucer"></i> Cafés</button>
+        <button data-filter="doces"><i class="fas fa-cake"></i> Doces</button>
+        <button data-filter="salgados"><i class="fas fa-bread-slice"></i> Salgados</button>
+        <button data-filter="bebidas"><i class="fas fa-wine-glass"></i> Bebidas</button>
+    </div>
+
+    <!-- LISTA DE PRODUTOS -->
+    <div class="menu-list" id="menuList">
+        <!-- Os itens serão inseridos via JavaScript -->
+    </div>
+
+</div>
+
+<!-- BOTÃO WHATSAPP -->
+<button class="whatsapp-float" id="whatsappBtn">
+    <i class="fab fa-whatsapp"></i> Fazer pedido
+</button>
+
+<script>
+    // -------------------------------------------------------------
+    // BANCO DE DADOS DO CARDÁPIO (adicione, remova ou edite à vontade)
+    // -------------------------------------------------------------
+    const menuData = [
+        // CAFÉS
+        { id: 1, nome: "Espresso", descricao: "Café puro, encorpado e intenso.", preco: 8.00, categoria: "cafes", emoji: "☕", tags: ["Quente"] },
+        { id: 2, nome: "Cappuccino", descricao: "Com leite vaporizado e espuma cremosa.", preco: 12.00, categoria: "cafes", emoji: "☕", tags: ["Quente", "Leite"] },
+        { id: 3, nome: "Latte Macchiato", descricao: "Leite, café e um toque de caramelo.", preco: 13.50, categoria: "cafes", emoji: "🥛", tags: ["Quente", "Doce"] },
+        { id: 4, nome: "Mocha", descricao: "Café com chocolate e leite cremoso.", preco: 14.00, categoria: "cafes", emoji: "🍫", tags: ["Quente", "Chocolate"] },
+        { id: 5, nome: "Café Gelado", descricao: "Café coado com gelo e raspas de limão.", preco: 11.00, categoria: "cafes", emoji: "🧊", tags: ["Gelado"] },
+
+        // DOCES
+        { id: 6, nome: "Bolo de Cenoura", descricao: "Com cobertura de chocolate derretido.", preco: 9.00, categoria: "doces", emoji: "🍰", tags: ["Vegano"] },
+        { id: 7, nome: "Torta de Limão", descricao: "Massa crocante e recheio cítrico.", preco: 10.00, categoria: "doces", emoji: "🥧", tags: ["Ácido"] },
+        { id: 8, nome: "Brownie", descricao: "Com pedaços de nozes e calda de chocolate.", preco: 8.50, categoria: "doces", emoji: "🍫", tags: ["Chocolate"] },
+        { id: 9, nome: "Cookie de Aveia", descricao: "Macio, com gotas de chocolate e aveia.", preco: 6.00, categoria: "doces", emoji: "🍪", tags: ["Saúdavel"] },
+
+        // SALGADOS
+        { id: 10, nome: "Pão de Queijo", descricao: "Minas tradicional, quentinho e fofinho.", preco: 7.00, categoria: "salgados", emoji: "🧀", tags: ["Sem glúten"] },
+        { id: 11, nome: "Croissant", descricao: "Folhado amanteigado, receita francesa.", preco: 9.00, categoria: "salgados", emoji: "🥐", tags: ["Manteiga"] },
+        { id: 12, nome: "Empada de Frango", descricao: "Com catupiry e massa podre.", preco: 8.00, categoria: "salgados", emoji: "🥧", tags: ["Recheio"] },
+
+        // BEBIDAS (não café)
+        { id: 13, nome: "Suco Natural", descricao: "Laranja ou maracujá, feito na hora.", preco: 8.00, categoria: "bebidas", emoji: "🍊", tags: ["Gelado"] },
+        { id: 14, nome: "Chá Gelado", descricao: "Chá preto com pêssego e hortelã.", preco: 9.00, categoria: "bebidas", emoji: "🍹", tags: ["Gelado"] },
+        { id: 15, nome: "Água com Gás", descricao: "Com limão e rodela de pepino.", preco: 5.00, categoria: "bebidas", emoji: "💧", tags: ["Zero açúcar"] },
+    ];
+
+    // -------------------------------------------------------------
+    // RENDERIZAÇÃO DINÂMICA
+    // -------------------------------------------------------------
+    const menuList = document.getElementById('menuList');
+    const searchInput = document.getElementById('searchInput');
+    const filterButtons = document.querySelectorAll('.filters button');
+
+    let currentFilter = 'todos';
+    let currentSearch = '';
+
+    // Função para exibir os itens
+    function renderMenu() {
+        const filtered = menuData.filter(item => {
+            // Filtro por categoria
+            if (currentFilter !== 'todos' && item.categoria !== currentFilter) return false;
+            // Filtro por busca (nome ou descrição)
+            if (currentSearch.trim() !== '') {
+                const searchLower = currentSearch.toLowerCase();
+                const nomeMatch = item.nome.toLowerCase().includes(searchLower);
+                const descMatch = item.descricao.toLowerCase().includes(searchLower);
+                if (!nomeMatch && !descMatch) return false;
+            }
+            return true;
+        });
+
+        if (filtered.length === 0) {
+            menuList.innerHTML = `
+                <div style="text-align:center; padding: 40px 10px; color: #7a6453;">
+                    <i class="fas fa-search" style="font-size: 32px; opacity: 0.5; display:block; margin-bottom:12px;"></i>
+                    <p style="font-weight:600;">Nenhum item encontrado</p>
+                    <p style="font-size:14px;">Tente outro filtro ou busca.</p>
+                </div>
+            `;
+            return;
+        }
+
+        let html = '';
+        filtered.forEach(item => {
+            html += `
+                <div class="menu-item" data-categoria="${item.categoria}">
+                    <div class="item-icon">${item.emoji}</div>
+                    <div class="item-info">
+                        <h3>${item.nome}</h3>
+                        <div class="desc">${item.descricao}</div>
+                        <div class="tags">
+                            ${item.tags.map(tag => `<span>#${tag}</span>`).join('')}
+                        </div>
+                    </div>
+                    <div class="item-price">R$ ${item.preco.toFixed(2).replace('.', ',')}</div>
+                </div>
+            `;
+        });
+        menuList.innerHTML = html;
+    }
+
+    // -------------------------------------------------------------
+    // EVENTOS DE FILTRO E BUSCA
+    // -------------------------------------------------------------
+
+    // Clique nos botões de filtro
+    filterButtons.forEach(btn => {
+        btn.addEventListener('click', function() {
+            filterButtons.forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            currentFilter = this.dataset.filter;
+            renderMenu();
+        });
+    });
+
+    // Busca em tempo real
+    searchInput.addEventListener('input', function() {
+        currentSearch = this.value;
+        renderMenu();
+    });
+
+    // -------------------------------------------------------------
+    // BOTÃO WHATSAPP (envia mensagem com os itens do cardápio)
+    // -------------------------------------------------------------
+    document.getElementById('whatsappBtn').addEventListener('click', function() {
+        // Número (coloque seu número com DDD, sem + e sem espaços)
+        const numero = '5586999999999'; // <-- ALTERE AQUI
+        // Mensagem padrão
+        const mensagem = encodeURIComponent(
+            'Olá! Gostaria de fazer um pedido pelo cardápio virtual. 👋\n\n' +
+            '📍 *Café & Aroma*\n' +
+            '🕒 Aberto das 08h às 22h\n\n' +
+            'Me envie os itens que deseja e seu endereço. Obrigado!'
+        );
+        const url = `https://wa.me/${numero}?text=${mensagem}`;
+        window.open(url, '_blank');
+    });
+
+    // -------------------------------------------------------------
+    // INICIALIZA
+    // -------------------------------------------------------------
+    renderMenu();
+
+    // (opcional) pequeno console para ajudar na edição
+    console.log('☕ Cardápio Café & Aroma carregado!');
+    console.log('Para editar os itens, altere o array "menuData" no JavaScript.');
+</script>
+
+</body>
+</html>
